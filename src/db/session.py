@@ -3,8 +3,6 @@ from contextlib import contextmanager
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker
 
-from table import Jokes
-
 main_engine = sa.create_engine(
     'postgresql://postgres:@127.0.0.1:5432/project'
 )
@@ -27,5 +25,3 @@ def session_scope():
         raise e
     finally:
         session.close()
-
-    

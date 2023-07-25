@@ -29,5 +29,6 @@ class Jokes(Base):
             joke_id=self.joke_id
         )
 
+
 a = Jokes()
 a.dict()
