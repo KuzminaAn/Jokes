@@ -3,9 +3,7 @@ from contextlib import contextmanager
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker
 
-main_engine = sa.create_engine(
-    'postgresql://postgres:@127.0.0.1:5432/project'
-)
+main_engine = sa.create_engine("postgresql://postgres:@127.0.0.1:5432/project")
 
 DBSSession = sessionmaker(
     bind=main_engine,

@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from src.app.main import app
-from src.db.functions import get_jokes_by_user, get_jokes_by_id
 
+from src.app.main import app
+from src.db.functions import get_jokes_by_id, get_jokes_by_user
 
 client = TestClient(app)
 
@@ -14,10 +14,7 @@ def test_root():
 
 def test_get_jokes_by_user_id_correct():
     user_id = 5
-    response = client.get(
-        "/joke/",
-        headers={'X-User': str(user_id)}
-    )
+    response = client.get("/joke/", headers={"X-User": str(user_id)})
     assert response.status_code == 200
     assert len(response.json()) == len(get_jokes_by_user(user_id))
 
@@ -29,10 +26,7 @@ def test_get_jokes_by_user_id_correct():
 
 def test_get_jokes_by_user_id_error():
     user_id = 500
-    response = client.get(
-        "/joke/",
-        headers={'X-User': str(user_id)}
-    )
+    response = client.get("/joke/", headers={"X-User": str(user_id)})
     assert response.status_code == 404
 
 
@@ -52,11 +46,11 @@ def test_get_jokes_by_joke_id_error():
 def test_create_joke():
     response = client.post(
         "/joke/",
-        headers={'X-User': '2'},
-        json={'joke_content': 'smth1', 'joke_author': 'smth2'}
+        headers={"X-User": "2"},
+        json={"joke_content": "smth1", "joke_author": "smth2"},
     )
     data = response.json()
-    joke_id = data['joke_id']
+    joke_id = data["joke_id"]
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
 
@@ -65,7 +59,7 @@ def test_update_joke_correct():
     joke_id = 5
     response = client.put(
         f"/joke/{joke_id}",
-        json={'joke_content': 'sydfutgyihu222', 'joke_author': 'Anna123'}
+        json={"joke_content": "sydfutgyihu222", "joke_author": "Anna123"},
     )
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
@@ -75,7 +69,7 @@ def test_update_joke_error():
     joke_id = 30
     response = client.put(
         f"/joke/{joke_id}",
-        json={'joke_content': 'sydfutgyihu222', 'joke_author': 'Anna123'}
+        json={"joke_content": "sydfutgyihu222", "joke_author": "Anna123"},
     )
     assert response.status_code == 404
 
@@ -93,9 +87,9 @@ def test_delete_item_error():
 def test_create_random_joke():
     response = client.post(
         "/joke/random",
-        headers={'X-User': '1'},
+        headers={"X-User": "1"},
     )
     data = response.json()
-    joke_id = data['joke_id']
+    joke_id = data["joke_id"]
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
