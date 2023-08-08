@@ -1,0 +1,10 @@
+host: localhost
+port: 7000
+path: /joke
+
+db:
+  name: project
+  user: postgres
+  host: 127.0.0.1
+  port: 5432
+  database: postgresql

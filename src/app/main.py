@@ -3,6 +3,7 @@ from time import time
 import requests
 from fastapi import FastAPI, Header, Path, Response
 
+from src.app.CreateItem import config
 from src.app.CreateItem import CreateItem
 from src.db.functions import (
     create_jokes,
@@ -21,7 +22,7 @@ async def root():
 
 
 # 1. список шуток конкретного пользователя
-@app.get("/joke/")
+@app.get("{}/".format(config.path))
 async def get_jokes_by_user_id(
     user_id: int = Header(default=None, alias="X-User", ge=1)
 ):
@@ -32,7 +33,7 @@ async def get_jokes_by_user_id(
 
 
 # 2. получить конкретную шутку по id
-@app.get("/joke/{joke_id}")
+@app.get(config.path + "/{joke_id}")
 async def get_jokes_by_joke_id(joke_id: int = Path(ge=1)):
     result = get_jokes_by_id(joke_id)
     if not result:
@@ -41,7 +42,7 @@ async def get_jokes_by_joke_id(joke_id: int = Path(ge=1)):
 
 
 # 3. создать шутку
-@app.post("/joke/")
+@app.post("{}/".format(config.path))
 async def create_joke(
     item: CreateItem, user_id: int = Header(default=None, alias="X-User", ge=1)
 ):
@@ -53,7 +54,7 @@ async def create_joke(
 
 
 # 4. обновить шутку
-@app.put("/joke/{joke_id}")
+@app.put(config.path + "/{joke_id}")
 async def update_joke(item: CreateItem, joke_id: int = Path(ge=1)):
     result = get_jokes_by_id(joke_id)
     if not result:
@@ -63,7 +64,7 @@ async def update_joke(item: CreateItem, joke_id: int = Path(ge=1)):
 
 
 # 5. удалить выбранную шутку
-@app.delete("/joke/{joke_id}")
+@app.delete(config.path + "/{joke_id}")
 async def delete_item(joke_id: int = Path(ge=1)):
     result = get_jokes_by_id(joke_id)
     if not result:
@@ -73,7 +74,7 @@ async def delete_item(joke_id: int = Path(ge=1)):
 
 
 # 6. добавить рандомную шутку
-@app.post("/joke/random")
+@app.post("{}/random".format(config.path))
 async def create_random_joke(
     user_id: int = Header(default=None, alias="X-User", ge=1)
 ):
