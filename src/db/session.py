@@ -1,12 +1,17 @@
 from contextlib import contextmanager
-from src.app.schemas import config
 
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker
 
-engine = "{}://{}:@{}:{}/{}".format(config.db.database, config.db.user,
-                                    config.db.host, config.db.port,
-                                    config.db.name)
+from src.app.schemas import config
+
+engine = "{}://{}:@{}:{}/{}".format(
+    config.db.database,
+    config.db.user,
+    config.db.host,
+    config.db.port,
+    config.db.name,
+)
 
 main_engine = sa.create_engine(engine)
 

@@ -1,5 +1,5 @@
-from yaml import load, FullLoader
 from pydantic import BaseModel, Field
+from yaml import FullLoader, load
 
 
 class CreateItem(BaseModel):
