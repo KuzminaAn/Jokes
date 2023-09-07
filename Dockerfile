@@ -9,7 +9,7 @@ COPY requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./src /code/src
-COPY ./config_app.yml .
+COPY config.example.yaml .
 
 EXPOSE 7000:7000
 

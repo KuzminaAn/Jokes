@@ -22,5 +22,5 @@ class Settings(BaseModel):
     db: Database
 
 
-conf_dict = load(open("config_app.yml"), Loader=FullLoader)
+conf_dict = load(open("config.example.yaml"), Loader=FullLoader)
 config = Settings(**conf_dict)
