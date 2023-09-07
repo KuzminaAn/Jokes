@@ -15,11 +15,18 @@ class Database(BaseModel):
     database: str
 
 
+class RandomJokes(BaseModel):
+    name: str
+    url: str
+    timeout: int
+
+
 class Settings(BaseModel):
     host: str
     port: int
     path: str
     db: Database
+    random_joke: RandomJokes
 
 
 conf_dict = load(open("config.example.yaml"), Loader=FullLoader)

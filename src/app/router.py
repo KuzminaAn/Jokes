@@ -3,7 +3,7 @@ from time import time
 import requests
 from fastapi import APIRouter, Header, Path, Response
 
-from src.app.schemas import CreateItem
+from src.app.schemas import CreateItem, config
 from src.db.functions import (
     create_jokes,
     delete_jokes,
@@ -17,11 +17,12 @@ router = APIRouter(
     tags=["joke"],
 )
 
+header = Header(default=None, alias="X-User", ge=1)
 
 # 1. список шуток конкретного пользователя
 @router.get("/")
 async def get_jokes_by_user_id(
-    user_id: int = Header(default=None, alias="X-User", ge=1)
+    user_id: int = header
 ):
     result = get_jokes_by_user(user_id)
     if not result:
@@ -41,7 +42,7 @@ async def get_jokes_by_joke_id(joke_id: int = Path(ge=1)):
 # 3. создать шутку
 @router.post("/")
 async def create_joke(
-    item: CreateItem, user_id: int = Header(default=None, alias="X-User", ge=1)
+    item: CreateItem, user_id: int = header
 ):
     created_at = int(time())
     result = create_jokes(
@@ -73,11 +74,11 @@ async def delete_item(joke_id: int = Path(ge=1)):
 # 6. добавить рандомную шутку
 @router.post("/random")
 async def create_random_joke(
-    user_id: int = Header(default=None, alias="X-User", ge=1)
+    user_id: int = header
 ):
-    r = requests.get("https://api.chucknorris.io/jokes/random")
+    r = requests.get(url=config.random_joke.url, timeout=config.random_joke.timeout)
     data = r.json()
     data1 = data["value"]
     created_at = int(time())
-    result = create_jokes(user_id, data1, "Chuck Norris", created_at)
+    result = create_jokes(user_id, data1, config.random_joke.name, created_at)
     return result
