@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from src.app.CreateItem import config
+from src.app.schemas import config
 
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker

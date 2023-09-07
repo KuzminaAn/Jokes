@@ -3,8 +3,8 @@ from time import time
 import requests
 from fastapi import FastAPI, Header, Path, Response
 
-from src.app.CreateItem import config
-from src.app.CreateItem import CreateItem
+from src.app.schemas import config
+from src.app.schemas import CreateItem
 from src.db.functions import (
     create_jokes,
     delete_jokes,
