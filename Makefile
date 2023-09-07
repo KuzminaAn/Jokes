@@ -19,5 +19,4 @@ black: #запуск flake8-black
 	black ./tests
 
 flake8: #запуск flake8
-	flake8 ./src
-	flake8 ./tests
+	flake8
