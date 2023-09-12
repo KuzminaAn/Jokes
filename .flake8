@@ -1,0 +1,9 @@
+[flake8]
+# N531 Log messages require translation hints
+# W503 Line break before binary operator
+# W504 Line break after binary operator
+max-line-length=79
+ignore = N531, W503, W504
+show-source = true
+exclude =
+    .venv,.env,.git

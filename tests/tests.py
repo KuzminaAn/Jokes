@@ -1,7 +1,8 @@
 from fastapi.testclient import TestClient
-from src.app.main import app
-from src.db.functions import get_jokes_by_user, get_jokes_by_id
 
+from src.app.main import app
+from src.db.functions import get_jokes_by_id, get_jokes_by_user
+from tests.test_vars import Variable
 
 client = TestClient(app)
 
@@ -12,12 +13,9 @@ def test_root():
     assert response.json() == {"message": "Hello, my friend!"}
 
 
-def test_get_jokes_by_user_id_correct():
-    user_id = 5
-    response = client.get(
-        "/joke/",
-        headers={'X-User': str(user_id)}
-    )
+def test_get_jokes_by_user_id_correct(fixture_test_get_jokes_by_user_id_correct):
+    user_id = fixture_test_get_jokes_by_user_id_correct
+    response = client.get("/joke/", headers={"X-User": str(user_id)})
     assert response.status_code == 200
     assert len(response.json()) == len(get_jokes_by_user(user_id))
 
@@ -27,24 +25,21 @@ def test_get_jokes_by_user_id_correct():
         assert i.dict() in data1
 
 
-def test_get_jokes_by_user_id_error():
-    user_id = 500
-    response = client.get(
-        "/joke/",
-        headers={'X-User': str(user_id)}
-    )
+def test_get_jokes_by_user_id_not_found(fixture_test_get_jokes_by_user_id_not_found):
+    user_id = fixture_test_get_jokes_by_user_id_not_found
+    response = client.get("/joke/", headers={"X-User": str(user_id)})
     assert response.status_code == 404
 
 
-def test_get_jokes_by_joke_id_correct():
-    joke_id = 8
+def test_get_jokes_by_joke_id_correct(fixture_test_get_jokes_by_joke_id_correct):
+    joke_id = fixture_test_get_jokes_by_joke_id_correct
     response = client.get(f"/joke/{joke_id}")
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
 
 
-def test_get_jokes_by_joke_id_error():
-    joke_id = 200
+def test_get_jokes_by_joke_id_not_found(fixture_test_get_jokes_by_joke_id_not_found):
+    joke_id = fixture_test_get_jokes_by_joke_id_not_found
     response = client.get(f"/joke/{joke_id}")
     assert response.status_code == 404
 
@@ -52,50 +47,52 @@ def test_get_jokes_by_joke_id_error():
 def test_create_joke():
     response = client.post(
         "/joke/",
-        headers={'X-User': '2'},
-        json={'joke_content': 'smth1', 'joke_author': 'smth2'}
+        headers=Variable.header_create,
+        json=Variable.json_create,
     )
     data = response.json()
-    joke_id = data['joke_id']
+    joke_id = data["joke_id"]
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
 
 
-def test_update_joke_correct():
-    joke_id = 5
+def test_update_joke_correct(fixture_test_update_joke_correct):
+    joke_id = fixture_test_update_joke_correct
     response = client.put(
         f"/joke/{joke_id}",
-        json={'joke_content': 'sydfutgyihu222', 'joke_author': 'Anna123'}
+        json=Variable.json_update,
     )
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()
 
 
-def test_update_joke_error():
-    joke_id = 30
+def test_update_joke_not_found(fixture_test_update_joke_not_found):
+    joke_id = fixture_test_update_joke_not_found
     response = client.put(
         f"/joke/{joke_id}",
-        json={'joke_content': 'sydfutgyihu222', 'joke_author': 'Anna123'}
+        json=Variable.json_update,
     )
     assert response.status_code == 404
 
 
-def test_delete_item_correct():
-    response = client.delete("/joke/4")
+def test_delete_item_correct(fixture_test_delete_item_correct):
+    joke_id = fixture_test_delete_item_correct
+    response = client.delete(f"/joke/{joke_id}")
     assert response.status_code == 204
 
 
-def test_delete_item_error():
-    response = client.delete("/joke/98")
+def test_delete_item_not_found(fixture_test_delete_item_not_found):
+    joke_id = fixture_test_delete_item_not_found
+    response = client.delete(f"/joke/{joke_id}")
     assert response.status_code == 404
 
 
 def test_create_random_joke():
     response = client.post(
         "/joke/random",
-        headers={'X-User': '1'},
+        headers=Variable.header_random,
     )
     data = response.json()
-    joke_id = data['joke_id']
+    joke_id = data["joke_id"]
     assert response.status_code == 200
     assert response.json() == get_jokes_by_id(joke_id).dict()

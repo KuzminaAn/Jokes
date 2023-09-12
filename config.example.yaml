@@ -1,0 +1,15 @@
+host: localhost
+port: 7000
+path: /joke
+
+db:
+  name: project
+  user: postgres
+  host: 127.0.0.1
+  port: 5432
+  database: postgresql
+
+random_joke:
+  name: Chuck Norris
+  url: https://api.chucknorris.io/jokes/random
+  timeout: 5
