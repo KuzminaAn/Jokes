@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -7,7 +7,7 @@ Base = declarative_base()
 class Jokes(Base):
 
     __tablename__ = 'jokes'
-    
+
     joke_id = Column('id', Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
     user_id = Column('user_id', Integer, nullable=False, unique=True, primary_key=True)
     content = Column('content', String, nullable=False)

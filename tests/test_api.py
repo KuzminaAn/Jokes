@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from src.app.main import app
-from src.db.functions import get_jokes_by_user, get_jokes_by_id
 
+from src.app.main import app
+from src.db.functions import get_jokes_by_id, get_jokes_by_user
 
 client = TestClient(app)
 

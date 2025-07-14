@@ -1,4 +1,5 @@
-from sqlalchemy import select, update, delete
+from sqlalchemy import delete, select, update
+
 from src.db.session import session_scope
 from src.db.table import Jokes
 
